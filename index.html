@@ -52,7 +52,7 @@
               console.log(res)
               if (res.data.success) {
                 document.cookie = `hexToken=${res.data.token}; expires=${new Date(res.data.expired)} GMT; path=/`;
-                window.location = '/products.html';
+                window.location = '/Vue2022_week2/products.html';
               }
             })
         }
