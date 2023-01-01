@@ -15,6 +15,9 @@
       <div class="row justify-content-center">
         <div class="col-md-6">
           <h2 class="fs-5 mb-3">請先登入</h2>
+          <div v-if="isLoginFail" class="alert alert-danger alert-dismissible mb-3" role="alert">
+            {{ errMsg }}
+          </div>
           <div class="form-floating mb-3">
             <input type="email" class="form-control" id="email" placeholder="帳號" v-model="user.username">
             <label for="email">帳號</label>
@@ -41,7 +44,9 @@
     const app = {
       data () {
         return {
-          user: {}
+          user: {},
+          isLoginFail: false,
+          errMsg: ''
         }
       },
       methods: {
@@ -49,11 +54,14 @@
           const url = `${apiUrl}admin/signin`;
           axios.post(url, this.user)
             .then((res) => {
-              console.log(res)
               if (res.data.success) {
                 document.cookie = `hexToken=${res.data.token}; expires=${new Date(res.data.expired)} GMT; path=/`;
                 window.location = '/Vue2022_week2/products.html';
               }
+            })
+            .catch((err) => {
+              this.isLoginFail = true;
+              this.errMsg = err.response.data.message;
             })
         }
       }
