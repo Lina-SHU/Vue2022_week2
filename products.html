@@ -32,9 +32,9 @@
                 <td>{{ product.price }}</td>
                 <td>
                   <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="productOff" :checked="product.is_enabled"
+                    <input class="form-check-input" type="checkbox" :id="product.id" :checked="product.is_enabled"
                       @click="product.is_enabled = product.is_enabled === 1 ? 0 : 1">
-                    <label class="form-check-label" for="productOff" :class="{ 'text-success': product.is_enabled }">{{ product.is_enabled === 1 ? '啟用' : '未啟用' }}</label>
+                    <label class="form-check-label" :for="product.id" :class="{ 'text-success': product.is_enabled }">{{ product.is_enabled === 1 ? '啟用' : '未啟用' }}</label>
                   </div>
                 </td>
                 <td>
@@ -93,10 +93,6 @@
     const apiUrl = 'https://vue3-course-api.hexschool.io/v2/';
     const path = 'lina-vueapi';
 
-    // 取 token
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-    axios.defaults.headers.common['Authorization'] = token;
-
     const app = {
       data() {
         return {
@@ -109,20 +105,14 @@
           const url = `${apiUrl}api/${path}/admin/products`;
           axios.get(url)
             .then((res) => {
-              if (res.data.success) {
-                this.products = res.data.products
-              }
+              this.products = res.data.products
             })
         },
         checkLogin () {
           const url = `${apiUrl}api/user/check`;
           axios.post(url)
             .then((res) => {
-              if (res.data.success) {
-                this.getProducts();
-                return
-              }
-              window.location = '/Vue2022_week2/index.html;'
+              this.getProducts();
             })
             .catch((err) => {
               window.location = '/Vue2022_week2/index.html';
@@ -130,6 +120,10 @@
         }
       },
       mounted () {
+        // 取 token
+        const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        axios.defaults.headers.common['Authorization'] = token;
+
         this.checkLogin();
       }
     }

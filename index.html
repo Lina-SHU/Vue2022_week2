@@ -54,10 +54,8 @@
           const url = `${apiUrl}admin/signin`;
           axios.post(url, this.user)
             .then((res) => {
-              if (res.data.success) {
-                document.cookie = `hexToken=${res.data.token}; expires=${new Date(res.data.expired)} GMT; path=/`;
-                window.location = '/Vue2022_week2/products.html';
-              }
+              document.cookie = `hexToken=${res.data.token}; expires=${new Date(res.data.expired)} GMT; path=/`;
+              window.location = '/Vue2022_week2/products.html';
             })
             .catch((err) => {
               this.isLoginFail = true;
